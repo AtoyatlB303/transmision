@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Transmisión en vivo</title>
+    <style>
+      body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        text-align: center;
+        background-color: #fff;
+        color: #333;
+        margin: 0;
+        padding: 0;
+      }
+
+      header {
+        margin-top: 15px;
+        position: relative;
+        display: inline-block;
+      }
+
+      h1 {
+        color: #6a1b9a;
+        font-size: 2rem;
+        margin-bottom: 10px;
+        font-weight: 600;
+        letter-spacing: 1px;
+      }
+
+      h1::after {
+        content: "";
+        display: block;
+        width: 80%;
+        height: 3px;
+        background-color: #6a1b9a;
+        margin: 8px auto 0;
+        border-radius: 2px;
+      }
+
+      #status {
+        margin: 30px 0 15px 0;
+        font-weight: 500;
+        font-size: 1.1rem;
+        color: #555;
+      }
+
+      #status.live {
+        color: #e53935;
+        font-weight: bold;
+      }
+
+      #player {
+        margin-top: 10px;
+      }
+
+      iframe {
+        width: 85%;
+        max-width: 800px;
+        height: 450px;
+        border-radius: 12px;
+        border: 2px solid #6a1b9a;
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+        transition: transform 0.3s ease;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Transmisión</h1>
+    </header>
+
+    <p id="status">Cargando información del canal...</p>
+    <div id="player"></div>
+
+    <script>
+      async function loadVideo() {
+        const res = await fetch("/live");
+        const data = await res.json();
+        const player = document.getElementById("player");
+        const status = document.getElementById("status");
+
+        if (data.live) {
+          status.textContent = "🔴 Transmisión en vivo";
+          status.classList.add("live");
+        } else {
+          status.textContent = "Actualmente no hay transmisión en vivo. Pero te dejamos la ultima publicación:";
+          status.classList.remove("live");
+        }
+
+        if (data.videoId) {
+          player.innerHTML = `
+            <iframe
+              src="https://www.youtube.com/embed/${data.videoId}"
+              frameborder="0"
+              allowfullscreen
+            ></iframe>
+          `;
+        } else {
+          player.innerHTML = "<p>No hay videos disponibles.</p>";
+        }
+      }
+
+      loadVideo();
+      setInterval(loadVideo, 60000); // Revisa cada minuto
+    </script>
+  </body>
+</html>
