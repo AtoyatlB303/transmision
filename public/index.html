@@ -75,7 +75,7 @@
 
     <script>
       async function loadVideo() {
-        const res = await fetch("https://transmision-z3b5.onrender.com");
+        const res = await fetch("/live");
         const data = await res.json();
         const player = document.getElementById("player");
         const status = document.getElementById("status");
