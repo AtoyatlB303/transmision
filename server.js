@@ -41,6 +41,11 @@ app.get("/live", async (req, res) => {
   }
 });
 
+app.get("/ping", (req, res) => {
+  res.send("ok");
+});
+
+
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en http://localhost:${PORT}`);
 });
