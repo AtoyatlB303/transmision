@@ -101,8 +101,14 @@
         }
       }
 
-      loadVideo();
-      setInterval(loadVideo, 300000); // Revisa cada minuto
+      loadVideo(); // al cargar la página
+
+      document.addEventListener("visibilitychange", () => {
+        if (!document.hidden) {
+          loadVideo(); // cuando el usuario vuelve a la pestaña
+        }
+      });
+
     </script>
   </body>
 </html>
